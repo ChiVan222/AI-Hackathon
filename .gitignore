@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+*.env
+
+# VSCode and IDE settings
+.vscode/
+.idea/
+
+# Logs and caches
+*.log
+*.tmp
+*.bak
+.DS_Store
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+
+# OS generated files
+Thumbs.db
+desktop.ini
