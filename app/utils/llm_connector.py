@@ -28,7 +28,8 @@ async def call_llm(prompt: str):
     try:
         cleaned = extract_json_from_text(text)
         data = json.loads(cleaned)
-        return data
+        return data 
     except Exception as e:
         print(f"[WARN] Failed to parse JSON: {e}")
         return {"raw_output": text}
+    
