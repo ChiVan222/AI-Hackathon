@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Hackathon Idea Generator - Updated Flow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+        }
+        
+        .flow-section {
+            margin: 40px 0;
+        }
+        
+        .flow-title {
+            font-size: 1.8em;
+            color: #764ba2;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .flow-step {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .flow-step:hover {
+            transform: translateX(10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .flow-step h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .flow-step p {
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #a0aec0;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            color: #68d391;
+        }
+        
+        .api-endpoint {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 5px 0;
+            font-family: monospace;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .comparison-box {
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .before {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+        }
+        
+        .after {
+            background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+        }
+        
+        .comparison-box h3 {
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00b894;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .arrow {
+            text-align: center;
+            font-size: 2em;
+            color: #667eea;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 AI Hackathon Idea Generator - New Flow</h1>
+        
+        <div class="flow-section">
+            <h2 class="flow-title">📊 Updated Data Flow</h2>
+            
+            <div class="flow-diagram">
+                <div class="flow-step">
+                    <h3>Step 1: User Input</h3>
+                    <p>User fills out the form with:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Theme (e.g., "Smart Cities")</li>
+                        <li>Constraints (optional)</li>
+                        <li>Team size (default: 4)</li>
+                        <li>Duration (default: 48 hours)</li>
+                    </ul>
+                </div>
+                
+                <div class="arrow">↓</div>
+                
+                <div class="flow-step">
+                    <h3>Step 2: Generate Initial Ideas</h3>
+                    <p><span class="api-endpoint">POST /api/generate</span></p>
+                    <div class="code-block">
+<span class="highlight">Request:</span>
+{
+  "theme": "Smart Cities",
+  "constraints": ["IoT", "Low-cost"]
+}
+
+<span class="highlight">Response:</span>
+{
+  "problems": ["Traffic congestion", "Energy waste"],
+  "existing_solutions": ["Smart traffic lights", "Solar panels"],
+  "idea_concepts": [
+    {
+      "name": "CityPulse",
+      "description": "Real-time city monitoring platform",
+      "target_audience": "City planners"
+    },
+    {
+      "name": "GreenRoute",
+      "description": "AI-powered eco-friendly navigation",
+      "target_audience": "Daily commuters"
+    }
+  ]
+}
+                    </div>
+                </div>
+                
+                <div class="arrow">↓</div>
+                
+                <div class="flow-step">
+                    <h3>Step 3: Display Ideas</h3>
+                    <p>Frontend shows beautiful cards with:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Name</strong> - Clear project title</li>
+                        <li><strong>Description</strong> - What the idea does</li>
+                        <li><strong>Target Audience</strong> - Who will use it</li>
+                        <li><strong>Button</strong> - "Get Detailed Plan"</li>
+                    </ul>
+                </div>
+                
+                <div class="arrow">↓ (User clicks button)</div>
+                
+                <div class="flow-step">
+                    <h3>Step 4: Request Detailed Plan</h3>
+                    <p><span class="api-endpoint">POST /api/plan/detailed</span></p>
+                    <div class="code-block">
+<span class="highlight">Request:</span>
+{
+  "idea_concept": {
+    "name": "CityPulse",
+    "description": "Real-time city monitoring...",
+    "target_audience": "City planners"
+  },
+  "team_members": 4,
+  "duration_hours": 48
+}
+
+<span class="highlight">Response:</span>
+{
+  "idea_name": "CityPulse",
+  "work_process": "Use Agile with daily standups...",
+  "timeline_summary": "48h: Planning (6h), Dev (30h)...",
+  "suggested_tech_stack": [
+    "React", "Node.js", "MongoDB", "IoT Sensors"
+  ],
+  "plan_steps": [
+    {
+      "phase": "Planning & Setup",
+      "tasks": ["Define requirements", "Setup env"]
+    }
+  ]
+}
+                    </div>
+                </div>
+                
+                <div class="arrow">↓</div>
+                
+                <div class="flow-step">
+                    <h3>Step 5: Display Detailed Plan</h3>
+                    <p>Frontend shows comprehensive plan with:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>⚙️ Work process methodology</li>
+                        <li>⏱️ Timeline breakdown</li>
+                        <li>💻 Tech stack badges</li>
+                        <li>📋 Phase-by-phase tasks</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-section">
+            <h2 class="flow-flow-title">🔄 Before vs After</h2>
+            
+            <div class="comparison">
+                <div class="comparison-box before">
+                    <h3>❌ Before</h3>
+                    <ul class="feature-list">
+                        <li>Ideas as simple strings</li>
+                        <li>Generic workflow for all</li>
+                        <li>No tech stack suggestions</li>
+                        <li>No target audience info</li>
+                        <li>No customization options</li>
+                        <li>All info shown at once</li>
+                    </ul>
+                </div>
+                
+                <div class="comparison-box after">
+                    <h3>✅ After</h3>
+                    <ul class="feature-list">
+                        <li>Structured idea objects</li>
+                        <li>Custom plan per idea</li>
+                        <li>AI-suggested tech stack</li>
+                        <li>Clear target audience</li>
+                        <li>Team & time settings</li>
+                        <li>Interactive two-step flow</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-section">
+            <h2 class="flow-title">🎯 Key Features</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
+                <div class="flow-step">
+                    <h3>🎨 Beautiful Cards</h3>
+                    <p>Each idea displays with clear name, description, and audience badge</p>
+                </div>
+                
+                <div class="flow-step">
+                    <h3>🚀 Interactive Buttons</h3>
+                    <p>Click to get detailed plans with loading states and animations</p>
+                </div>
+                
+                <div class="flow-step">
+                    <h3>⚙️ Customizable</h3>
+                    <p>Adjust team size and duration for tailored implementation plans</p>
+                </div>
+                
+                <div class="flow-step">
+                    <h3>📋 Comprehensive Plans</h3>
+                    <p>Work process, timeline, tech stack, and phase-by-phase tasks</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flow-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; border-radius: 15px; color: white; text-align: center;">
+            <h2 style="color: white; margin-bottom: 15px;">✅ Everything is Ready!</h2>
+            <p style="font-size: 1.2em; margin: 10px 0;">Your frontend has been updated to work perfectly with your new backend structure.</p>
+            <p style="font-size: 1.1em; margin: 10px 0;">Just start both servers and enjoy your enhanced AI Hackathon Idea Generator! 🎉</p>
+        </div>
+    </div>
+</body>
+</html>
