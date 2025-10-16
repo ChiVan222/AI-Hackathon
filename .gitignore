@@ -32,3 +32,4 @@ dist/
 # OS generated files
 Thumbs.db
 desktop.ini
+*.md
