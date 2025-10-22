@@ -85,10 +85,9 @@ Return strictly valid JSON:
     if existing_context_url and access_token and cloud_id:
         project_key_match = re.search(r"(?:browse/|projects/)([A-Z]+)", existing_context_url)
         project_key = project_key_match.group(1) if project_key_match else existing_context_url
-
         try:
-            print(f"🌀 Creating Jira issues for project {project_key} using OAuth...")
-            new_keys = await create_jira_issues_from_plan(raw_response, project_key, access_token, cloud_id)
+            print(f"Creating Jira issues for project {project_key} using OAuth...")
+            new_keys = await create_jira_issues_from_plan(plan_response.model_dump(), project_key, access_token, cloud_id)
             if new_keys:
                 print(f"Successfully created Jira issues: {', '.join(new_keys)}")
             else:
