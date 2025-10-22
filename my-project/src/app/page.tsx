@@ -180,8 +180,11 @@ export default function Home() {
 
   // Helper function to format timeline with phase breaks and bold labels
   const formatTimelineWithPhases = (text: string) => {
+    // Remove ** markdown bold syntax
+    const cleanText = text.replace(/\*\*/g, '');
+    
     // Split by common line breaks or periods
-    const lines = text.split(/(?:\r?\n|\. )/);
+    const lines = cleanText.split(/(?:\r?\n|\. )/);
     
     return lines.map((line, index) => {
       if (!line.trim()) return null;
