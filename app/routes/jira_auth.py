@@ -42,7 +42,10 @@ async def jira_callback(request: Request, code: str):
     access_token = token_data.get("access_token")
 
     if not access_token:
-        return JSONResponse({"error": "Failed to get access token", "details": token_data})
+        # Redirect to frontend with error
+        from urllib.parse import urlencode
+        error_params = urlencode({"error": "Failed to authenticate with Jira"})
+        return RedirectResponse(url=f"http://localhost:3000/?{error_params}")
 
     # Fetch accessible Jira sites
     res = requests.get(
@@ -51,7 +54,11 @@ async def jira_callback(request: Request, code: str):
     )
     sites = res.json()
 
-    return JSONResponse({
+    # Redirect to frontend with OAuth data
+    from urllib.parse import urlencode
+    import json
+    params = urlencode({
         "access_token": access_token,
-        "accessible_sites": sites
+        "accessible_sites": json.dumps(sites)
     })
+    return RedirectResponse(url=f"http://localhost:3000/?{params}")

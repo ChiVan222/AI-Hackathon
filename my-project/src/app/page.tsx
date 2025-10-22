@@ -48,6 +48,11 @@ export default function Home() {
   const [directIdeaName, setDirectIdeaName] = useState('');
   const [directIdeaDescription, setDirectIdeaDescription] = useState('');
   const [directTargetAudience, setDirectTargetAudience] = useState('');
+  
+  // Jira integration states
+  const [contextUrl, setContextUrl] = useState('');
+  const [jiraAccessToken, setJiraAccessToken] = useState('');
+  const [jiraSites, setJiraSites] = useState<any[]>([]);
 
   // Helper function to get tech stack logo and URL
   const getTechInfo = (techName: string): { logoUrl: string; url: string; displayName: string; iconName: string } => {
@@ -124,6 +129,9 @@ export default function Home() {
       'github': { iconName: 'github', url: 'https://github.com', color: '181717' },
       'vscode': { iconName: 'visualstudiocode', url: 'https://code.visualstudio.com', displayName: 'VS Code', color: '007ACC' },
       'figma': { iconName: 'figma', url: 'https://www.figma.com', color: 'F24E1E' },
+      'jira': { iconName: 'jira', url: 'https://www.atlassian.com/software/jira', color: '0052CC' },
+      'confluence': { iconName: 'confluence', url: 'https://www.atlassian.com/software/confluence', color: '172B4D' },
+      'trello': { iconName: 'trello', url: 'https://trello.com', color: '0052CC' },
     };
     
     // Try to find exact match
@@ -286,6 +294,7 @@ export default function Home() {
           idea_concept: idea,
           team_members: teamMembers,
           duration_hours: durationHours,
+          existing_context_url: contextUrl || undefined,
         }),
       });
 
@@ -333,6 +342,7 @@ export default function Home() {
           idea_concept: ideaConcept,
           team_members: teamMembers,
           duration_hours: durationHours,
+          existing_context_url: contextUrl || undefined,
         }),
       });
 
@@ -357,6 +367,32 @@ export default function Home() {
       setPlanLoading(false);
     }
   };
+
+  // Handle Jira OAuth Login
+  const handleJiraLogin = () => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    window.location.href = `${apiUrl}/auth/login`;
+  };
+
+  // Check for OAuth callback params on component mount
+  useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('access_token');
+    const sites = params.get('accessible_sites');
+    
+    if (token) {
+      setJiraAccessToken(token);
+      if (sites) {
+        try {
+          setJiraSites(JSON.parse(decodeURIComponent(sites)));
+        } catch (e) {
+          console.error('Failed to parse Jira sites:', e);
+        }
+      }
+      // Clean up URL
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
@@ -482,7 +518,61 @@ export default function Home() {
                       />
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500">
+                  
+                  {/* Jira Integration in Settings */}
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center">
+                      <img 
+                        src="https://cdn.simpleicons.org/jira/0052CC" 
+                        alt="Jira logo" 
+                        className="w-4 h-4 mr-2"
+                      />
+                      Jira Context (Optional)
+                    </h4>
+                    
+                    {!jiraAccessToken ? (
+                      <div className="bg-blue-50 p-3 rounded-lg border border-blue-200 mb-3">
+                        <p className="text-xs text-gray-700 mb-2">
+                          Connect Jira for context-aware planning
+                        </p>
+                        <button
+                          type="button"
+                          onClick={handleJiraLogin}
+                          className="px-3 py-1.5 bg-blue-600 text-white text-xs rounded hover:bg-blue-700 transition-colors flex items-center gap-1.5"
+                        >
+                          <img 
+                            src="https://cdn.simpleicons.org/jira/FFFFFF" 
+                            alt="Jira logo" 
+                            className="w-3 h-3"
+                          />
+                          Connect Jira
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="bg-green-50 p-3 rounded-lg border border-green-200 mb-3">
+                        <p className="text-xs text-green-700 flex items-center">
+                          <span className="text-green-600 mr-1">✓</span>
+                          Jira connected
+                        </p>
+                      </div>
+                    )}
+                    
+                    <div>
+                      <label htmlFor="contextUrlTab1" className="block text-xs font-medium text-gray-700 mb-1">
+                        Context URL
+                      </label>
+                      <input
+                        id="contextUrlTab1"
+                        type="text"
+                        value={contextUrl}
+                        onChange={(e) => setContextUrl(e.target.value)}
+                        placeholder="Jira project key, URL, or JQL"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none text-sm"
+                      />
+                    </div>
+                  </div>
+                  
+                  <p className="text-xs text-gray-500 mt-3">
                     These settings will be used when generating detailed implementation plans
                   </p>
                 </div>
@@ -754,6 +844,69 @@ export default function Home() {
                     placeholder="e.g., Municipal waste management departments, Eco-conscious citizens"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
                   />
+                </div>
+
+                {/* Jira Integration Section */}
+                <div className="border-t pt-6">
+                  <h3 className="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                    <img 
+                      src="https://cdn.simpleicons.org/jira/0052CC" 
+                      alt="Jira logo" 
+                      className="w-5 h-5 mr-2"
+                    />
+                    Jira Integration (Optional)
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    {!jiraAccessToken ? (
+                      <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <p className="text-sm text-gray-700 mb-3">
+                          Connect your Jira account to use existing project context for better planning.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={handleJiraLogin}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                        >
+                          <img 
+                            src="https://cdn.simpleicons.org/jira/FFFFFF" 
+                            alt="Jira logo" 
+                            className="w-4 h-4"
+                          />
+                          Connect Jira Account
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                        <p className="text-sm text-green-700 mb-2 flex items-center">
+                          <span className="text-green-600 mr-2">✓</span>
+                          Jira account connected
+                        </p>
+                        {jiraSites.length > 0 && (
+                          <p className="text-xs text-gray-600">
+                            Connected to: {jiraSites.map(s => s.name).join(', ')}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                    
+                    <div>
+                      <label htmlFor="contextUrl" className="block text-sm font-medium text-gray-700 mb-2">
+                        Context URL (Jira Project Key, URL, or JQL)
+                      </label>
+                      <input
+                        id="contextUrl"
+                        type="text"
+                        value={contextUrl}
+                        onChange={(e) => setContextUrl(e.target.value)}
+                        placeholder="e.g., PROJECT-123, https://yoursite.atlassian.net/browse/PROJECT-123, or JQL query"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        Provide a Jira project key, issue URL, or JQL query to use as context for planning
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Team Settings */}
