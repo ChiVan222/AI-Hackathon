@@ -30,10 +30,15 @@ class InitialIdeaResponse(BaseModel):
     
 # 2. Request for the new /plan/detailed endpoint
 class DetailedPlanRequest(BaseModel):
-    idea_concept: IdeaConcept # The idea selected by the user
+    idea_concept: IdeaConcept
     team_members: int = Field(default=4, description="Number of team members for task allocation.")
     duration_hours: int = Field(default=48, description="Total duration of the hackathon in hours (e.g., 48h).")
     
+    # NEW FIELD for Jira/Website Context
+    existing_context_url: Optional[str] = Field(
+        None, 
+        description="URL of an existing website or Jira project/issue to use as planning context (e.g., a Jira Project Key, URL, or JQL)."
+    )
 # 3. Response for the new /plan/detailed endpoint
 class DetailedPlanResponse(BaseModel):
     idea_name: str
