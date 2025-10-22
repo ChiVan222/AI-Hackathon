@@ -26,10 +26,10 @@ def initialize_chroma():
         # Try to get existing collection
         try:
             collection = chroma_client.get_collection("hackathon_ideas")
-            print("✅ ChromaDB collection loaded successfully")
+            print(" ChromaDB collection loaded successfully")
         except (KeyError, Exception) as e:
-            print(f"⚠️ Error loading collection: {e}")
-            print("🔄 Recreating ChromaDB collection...")
+            print(f" Error loading collection: {e}")
+            print(" Recreating ChromaDB collection...")
             
             # Delete old collection if it exists but is corrupted
             try:
@@ -42,14 +42,14 @@ def initialize_chroma():
                 name="hackathon_ideas",
                 metadata={"description": "Hackathon ideas for RAG retrieval"}
             )
-            print("✅ New ChromaDB collection created")
+            print("New ChromaDB collection created")
             
         embedder = SentenceTransformer("all-MiniLM-L6-v2")
         return collection
         
     except Exception as e:
-        print(f"❌ Fatal ChromaDB error: {e}")
-        print("⚠️ Continuing without RAG retrieval...")
+        print(f"Fatal ChromaDB error: {e}")
+        print("Continuing without RAG retrieval...")
         return None
 
 def normalize_llm_output(data: dict):
@@ -106,16 +106,16 @@ async def generate_ideas(request: ThemeRequest) -> InitialIdeaResponse:
                 retrieved_context = "\n".join(
                     f"- {doc}" for doc in results['documents'][0]
                 )
-                print(f"✅ Retrieved {len(results['documents'][0])} similar ideas")
+                print(f" Retrieved {len(results['documents'][0])} similar ideas")
             else:
                 retrieved_context = "No closely related ideas found in the database."
                 
         except Exception as e:
             # Fallback if the database or embedding process fails
-            print(f"⚠️ RAG Retrieval Error: {e}")
+            print(f" RAG Retrieval Error: {e}")
             retrieved_context = "Could not retrieve past ideas due to an error. Rely on general knowledge."
     else:
-        print("⚠️ ChromaDB not available, proceeding without RAG retrieval")
+        print("ChromaDB not available, proceeding without RAG retrieval")
 
     # ----------------------------------------------------
     # Step 4: Build LLM prompt with retrieved context
@@ -163,7 +163,7 @@ Return the answer strictly as a valid JSON object:
       try:
         data = json.loads(cleaned)
       except Exception as e:
-        print("❌ JSON parse error:", e)
+        print(" JSON parse error:", e)
         print("Raw output:\n", cleaned)
         raise
       
