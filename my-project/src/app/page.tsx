@@ -295,6 +295,8 @@ export default function Home() {
           team_members: teamMembers,
           duration_hours: durationHours,
           existing_context_url: contextUrl || undefined,
+          jira_access_token: jiraAccessToken || undefined,
+          jira_cloud_id: jiraSites.length > 0 ? jiraSites[0].id : undefined,
         }),
       });
 
@@ -343,6 +345,8 @@ export default function Home() {
           team_members: teamMembers,
           duration_hours: durationHours,
           existing_context_url: contextUrl || undefined,
+          jira_access_token: jiraAccessToken || undefined,
+          jira_cloud_id: jiraSites.length > 0 ? jiraSites[0].id : undefined,
         }),
       });
 
