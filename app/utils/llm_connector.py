@@ -19,7 +19,7 @@ def extract_json_from_text(text: str):
 
 async def call_llm(prompt: str):
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-2.5-flash-lite",
         contents=prompt
     )
 

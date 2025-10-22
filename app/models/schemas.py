@@ -33,7 +33,8 @@ class DetailedPlanRequest(BaseModel):
     idea_concept: IdeaConcept
     team_members: int = Field(default=4, description="Number of team members for task allocation.")
     duration_hours: int = Field(default=48, description="Total duration of the hackathon in hours (e.g., 48h).")
-    
+    jira_access_token: Optional[str] = None  # Populated from frontend (e.g., storedAccessToken from query param or storage)
+    jira_cloud_id: Optional[str] = None
     # NEW FIELD for Jira/Website Context
     existing_context_url: Optional[str] = Field(
         None, 

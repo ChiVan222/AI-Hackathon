@@ -95,7 +95,7 @@ Return strictly valid JSON:
     # STEP 3 — Create Jira issues if credentials provided
     # -----------------------------------------------
     if existing_context_url and access_token and cloud_id:
-        project_key_match = re.search(r"browse/([A-Z]+)", existing_context_url)
+        project_key_match = re.search(r"(?:browse/|projects/)([A-Z]+)", existing_context_url)
         project_key = project_key_match.group(1) if project_key_match else existing_context_url
 
         try:
@@ -107,5 +107,6 @@ Return strictly valid JSON:
                 print("No Jira issues were created.")
         except Exception as e:
             print(f"Jira issue creation failed: {e}")
-
+    else:
+        print(existing_context_url.__str__() +" "+ access_token.__str__() +" "+ cloud_id.__str__())
     return plan_response
