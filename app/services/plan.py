@@ -17,16 +17,11 @@ async def generate_detailed_plan(request: DetailedPlanRequest) -> DetailedPlanRe
     concept = request.idea_concept
     jira_context_text = ""
 
-    # Extract optional Jira OAuth data from the request
     access_token = getattr(request, "jira_access_token", None)
     cloud_id = getattr(request, "jira_cloud_id", None)
     existing_context_url = getattr(request, "existing_context_url", None)
 
-    # -----------------------------------------------
-    # STEP 1 — Fetch existing Jira context if available
-    # -----------------------------------------------
     if existing_context_url and access_token and cloud_id:
-        # Extract the Jira project key from the URL or plain key
         project_key_match = re.search(r"browse/([A-Z]+)", existing_context_url)
         project_key = project_key_match.group(1) if project_key_match else existing_context_url
 
@@ -47,10 +42,6 @@ Current Issues:
 """
         except Exception as e:
             print(f"Could not fetch Jira context: {e}")
-
-    # -----------------------------------------------
-    # STEP 2 — Generate the project plan with the LLM
-    # -----------------------------------------------
     prompt = f"""
 You are a Hackathon Project Planner.
 Your task is to create a detailed implementation plan for the following idea, considering the team constraints.
@@ -91,9 +82,6 @@ Return strictly valid JSON:
 
     plan_response = DetailedPlanResponse(**raw_response)
 
-    # -----------------------------------------------
-    # STEP 3 — Create Jira issues if credentials provided
-    # -----------------------------------------------
     if existing_context_url and access_token and cloud_id:
         project_key_match = re.search(r"(?:browse/|projects/)([A-Z]+)", existing_context_url)
         project_key = project_key_match.group(1) if project_key_match else existing_context_url
