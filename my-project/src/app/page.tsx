@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface IdeaConcept {
   name: string;
@@ -369,13 +369,17 @@ export default function Home() {
   };
 
   // Handle Jira OAuth Login
-  const handleJiraLogin = () => {
+ const handleJiraLogin = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    window.location.href = `${apiUrl}/auth/login`;
+    
+    // The current URL is encoded and passed as 'redirect_to'
+    const currentUrl = encodeURIComponent(window.location.href);
+    window.location.href = `${apiUrl}/auth/login?redirect_to=${currentUrl}`;
   };
 
   // Check for OAuth callback params on component mount
-  useState(() => {
+ useEffect(() => {
+    // This code only runs on the client after mounting, so 'window' is defined.
     const params = new URLSearchParams(window.location.search);
     const token = params.get('access_token');
     const sites = params.get('accessible_sites');
@@ -392,7 +396,7 @@ export default function Home() {
       // Clean up URL
       window.history.replaceState({}, '', window.location.pathname);
     }
-  });
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
